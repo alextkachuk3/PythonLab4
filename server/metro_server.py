@@ -2,12 +2,13 @@ import Pyro4 as Pyro4
 
 from server.metro import Metro
 
-from config import db_host, db_port, db_user, db_password, db_name
-
 
 @Pyro4.expose
 class MetroServer:
     def __init__(self):
+        self.metro = None
+
+    def connect_to_db(self, db_host, db_port, db_user, db_password, db_name):
         self.metro = Metro(db_host, db_port, db_user, db_password, db_name)
 
     def add_line(self, color: str):
