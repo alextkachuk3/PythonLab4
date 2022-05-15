@@ -96,16 +96,21 @@ class Metro:
         finally:
             self.connection.commit()
 
-    def update_station(self, station_id, station_name, open_time, close_time):
+    def update_station(self, station_id, station_name, line_id, open_time, close_time):
         try:
             with self.connection.cursor() as cursor:
-                update_station_name_query = "UPDATE metro_stations SET name = %s, open = %s, close = %s WHERE id = %s"
-                update_station_name_val = (station_name, open_time, close_time, station_id)
+                update_station_name_query = "UPDATE metro_stations " \
+                                            "SET name = %s, " \
+                                            "metro_line_id = %s, " \
+                                            "open = %s, " \
+                                            "close = %s " \
+                                            "WHERE id = %s"
+                update_station_name_val = (station_name, line_id, open_time, close_time, station_id)
                 cursor.execute(update_station_name_query, update_station_name_val)
         finally:
             self.connection.commit()
 
-    def find_station(self, station_name):
+    def find_station_by_name(self, station_name):
         with self.connection.cursor() as cursor:
             station_find_query = "SELECT * FROM metro_stations WHERE name = %s"
             station_find_val = station_name
