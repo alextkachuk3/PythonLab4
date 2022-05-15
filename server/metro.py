@@ -118,7 +118,7 @@ class Metro:
             station = cursor.fetchall()[0]
             return station[0], station[1], str(station[2]), str(station[3]), station[4]
 
-    def count_of_line_stations(self, line_id):
+    def get_count_of_line_stations(self, line_id):
         with self.connection.cursor() as cursor:
             station_count_query = "SELECT COUNT(*) AS stations_count FROM metro_stations WHERE metro_line_id = %s"
             station_count_val = line_id

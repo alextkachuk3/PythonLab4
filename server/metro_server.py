@@ -29,7 +29,7 @@ class MetroServer:
         return self.metro.find_station_by_name(name)
 
     def get_count_of_line_stations(self, line_id: int):
-        return self.metro.count_of_line_stations(line_id)
+        return self.metro.get_count_of_line_stations(line_id)
 
     def get_line_stations_list(self, line_id: int):
         return self.metro.get_line_stations_list(line_id)
