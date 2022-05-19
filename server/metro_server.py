@@ -35,5 +35,5 @@ class MetroServer:
     def get_line_stations_list(self, line_id: int):
         return self.metro.get_line_stations_list(line_id)
 
-    def get_line_list(self):
+    def get_lines_list(self):
         return self.metro.get_lines_list()

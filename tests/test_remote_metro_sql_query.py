@@ -11,33 +11,53 @@ from test_config import db_host, db_port, db_user, db_password, db_name
 
 
 class TestRemoteMetroSQL(unittest.TestCase):
-    def init(self):
-        self.server = MetroServerService()
-        self.th = threading.Thread(target=self.server.run)
-        self.th.start()
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.server = MetroServerService()
+        cls.th = threading.Thread(target=cls.server.run)
+        cls.th.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.server.stop()
+        cls.th.join()
+
+    def setUp(self) -> None:
         self.client = MetroClient()
         self.client.connect_to_db(db_host, db_port, db_user, db_password, db_name)
         self.metro = Metro(db_host, db_port, db_user, db_password, db_name)
 
-    def end(self):
+    def tearDown(self) -> None:
         self.metro.connection.cursor().execute("DROP TABLE metro_lines, metro_stations")
-        self.server.stop()
-        self.th.join()
+
+    def restart_metro_tables(self):
+        self.metro.connection.cursor().execute("DROP TABLE metro_lines, metro_stations")
+        self.metro.connection.commit()
+        self.metro.init_tables()
 
     def test_adding_lines(self):
-        self.init()
-
         self.client.add_line('green')
         self.client.add_line('red')
         self.client.add_line('blue')
+        self.metro.connection.commit()
+
+        result = self.metro.get_lines_list()
+        print(result)
+
+        self.assertEqual(result, [(1, 'green'), (2, 'red'), (3, 'blue')])
+
+    def test_delete_lines(self):
+        self.client.add_line('green')
+        self.client.add_line('red')
+        self.client.add_line('blue')
+        self.client.delete_line(2)
 
         self.metro.connection.commit()
         result = self.metro.get_lines_list()
         print(result)
 
-        self.end()
-
-        self.assertEqual(result, [(1, 'green'), (2, 'red'), (3, 'blue')])
+        self.assertEqual(result, [(1, 'green'), (3, 'blue')])
 
 
 if __name__ == '__main__':

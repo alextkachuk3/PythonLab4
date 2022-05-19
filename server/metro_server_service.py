@@ -15,3 +15,5 @@ class MetroServerService:
 
     def stop(self):
         self.daemon.shutdown()
+        self.daemon.unregister('metro')
+        self.daemon.close()
