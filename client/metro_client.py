@@ -1,14 +1,11 @@
-import Pyro4
+import Pyro4 as Pyro
 
 
 class MetroClient:
     def __init__(self):
-        self.ns = Pyro4.locateNS()
+        self.ns = Pyro.locateNS()
         self.uri = self.ns.lookup('metro')
-        self.o = Pyro4.Proxy(self.uri)
-
-    def connect_to_db(self, db_host, db_port, db_user, db_password, db_name):
-        self.o.connect_to_db(db_host, db_port, db_user, db_password, db_name)
+        self.o = Pyro.Proxy(self.uri)
 
     def add_line(self, name: str):
         self.o.add_line(name)

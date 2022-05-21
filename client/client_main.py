@@ -1,9 +1,6 @@
-import Pyro4
+import Pyro4 as Pyro
 
-from config import db_host, db_port, db_user, db_password, db_name
-
-ns = Pyro4.locateNS()
+ns = Pyro.locateNS()
 uri = ns.lookup('metro')
-o = Pyro4.Proxy(uri)
-o.connect_to_db(db_host, db_port, db_user, db_password, db_name)
+o = Pyro.Proxy(uri)
 print(o.get_lines_list())
