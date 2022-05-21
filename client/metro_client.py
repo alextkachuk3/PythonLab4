@@ -19,6 +19,9 @@ class MetroClient:
     def delete_station(self, station_id: int):
         self.o.delete_station(station_id)
 
+    def get_list_of_stations(self):
+        return self.o.get_list_of_stations()
+
     def update_station(self, station_id: id, name: str, line_id: int, open_time: str, close_time: str):
         self.o.update_station(station_id, name, line_id, open_time, close_time)
 
@@ -33,3 +36,6 @@ class MetroClient:
 
     def get_lines_list(self):
         return self.o.get_lines_list()
+
+    def reset_db(self):
+        return self.o.reset_db()

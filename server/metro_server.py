@@ -24,6 +24,10 @@ class MetroServer:
         self.metro.delete_station(station_id)
 
     @Pyro.expose
+    def get_list_of_stations(self):
+        return self.metro.get_list_of_stations()
+
+    @Pyro.expose
     def update_station(self, station_id: int, name: str, line_id: int, open_time: str, close_time: str):
         self.metro.update_station(station_id, name, line_id, open_time, close_time)
 
@@ -42,3 +46,9 @@ class MetroServer:
     @Pyro.expose
     def get_lines_list(self):
         return self.metro.get_lines_list()
+
+    @Pyro.expose
+    def reset_db(self):
+        self.metro.connection.cursor().execute("DROP TABLE metro_lines, metro_stations")
+        self.metro.connection.commit()
+        self.metro.init_tables()

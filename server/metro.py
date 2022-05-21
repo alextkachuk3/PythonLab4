@@ -96,6 +96,20 @@ class Metro:
         finally:
             self.connection.commit()
 
+    def get_list_of_stations(self, row_count=100):
+        with self.connection.cursor() as cursor:
+            select_station_list_query = "SELECT * FROM metro_stations LIMIT %s"
+            select_station_list_val = row_count
+            cursor.execute(select_station_list_query, select_station_list_val)
+            stations = cursor.fetchall()
+
+        result = []
+
+        for station in stations:
+            result.append((station[0], station[1], str(station[2]), str(station[3]), station[4]))
+
+        return result
+
     def update_station(self, station_id, station_name, line_id, open_time, close_time):
         try:
             with self.connection.cursor() as cursor:
